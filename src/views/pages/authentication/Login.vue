@@ -160,7 +160,15 @@
               </b-button>
             </b-form>
           </validation-observer>
-
+          <br>
+          <b-button
+            type="primary"
+            variant="danger"
+            block
+            @click="loginWithAuth0"
+          >
+            Sign in With AUTH0
+          </b-button>
           <b-card-text class="text-center mt-2">
             <span>New on our platform? </span>
             <b-link :to="{name:'auth-register'}">
@@ -273,6 +281,26 @@ export default {
       return this.sideImg
     },
   },
+  mounted() {
+    const userData = localStorage.getItem('userData')
+    console.log(userData);
+
+    if (localStorage.getItem('userData')) {
+      this.$router.replace(getHomeRouteForLoggedInUser(userData.role))
+        .then(() => {
+          this.$toast({
+            component: ToastificationContent,
+            position: 'top-right',
+            props: {
+              title: `Welcome ${userData.fullName || userData.username}`,
+              icon: 'CoffeeIcon',
+              variant: 'success',
+              text: `You have successfully logged in as ${userData.role}. Now you can start to explore!`,
+            },
+          })
+        })
+    }
+  },
   methods: {
     login() {
       this.$refs.loginForm.validate().then(success => {
@@ -285,6 +313,7 @@ export default {
               const { userData } = response.data
               useJwt.setToken(response.data.accessToken)
               useJwt.setRefreshToken(response.data.refreshToken)
+              console.log(JSON.stringify(userData))
               localStorage.setItem('userData', JSON.stringify(userData))
               this.$ability.update(userData.ability)
 
@@ -312,6 +341,9 @@ export default {
             })
         }
       })
+    },
+    loginWithAuth0() {
+      this.$auth.loginWithRedirect()
     },
   },
 }

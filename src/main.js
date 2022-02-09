@@ -7,6 +7,10 @@ import router from './router'
 import store from './store'
 import App from './App.vue'
 
+import { domain, clientId } from '../auth_config.json'
+
+import { Auth0Plugin } from './auth'
+
 // Global Components
 import './global-components'
 
@@ -22,6 +26,18 @@ import '@/libs/tour'
 
 // Axios Mock Adapter
 import '@/@fake-db/db'
+
+Vue.use(Auth0Plugin, {
+  domain,
+  clientId,
+  onRedirectCallback: appState => {
+    router.push(
+      appState && appState.targetUrl
+        ? appState.targetUrl
+        : window.location.pathname,
+    )
+  },
+})
 
 // BSV Plugin Registration
 Vue.use(ToastPlugin)
