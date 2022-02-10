@@ -1,8 +1,11 @@
 import Vue from 'vue'
 import createAuth0Client from '@auth0/auth0-spa-js'
-
+import store from '@/store'
 /** Define a default action to perform after authentication */
-const DEFAULT_REDIRECT_CALLBACK = () => window.history.replaceState({}, document.title, window.location.pathname)
+const DEFAULT_REDIRECT_CALLBACK = () => {
+  console.log('DEFAULT_REDIRECT_CALLBACK')
+
+  return window.history.replaceState({}, document.title, window.location.pathname)}
 
 let instance
 
@@ -59,23 +62,6 @@ export const useAuth0 = ({
         // Initialize our internal authentication state
         this.isAuthenticated = await this.auth0Client.isAuthenticated()
         this.user = await this.auth0Client.getUser()
-
-        const {
-          email, picture, nickname, org_id, name,
-        } = this.user
-
-        const userToSave = {
-          email,
-          avatar: picture,
-          fullName: name,
-          id: org_id,
-          username: nickname,
-          extras: { eCommerceCartItemsCount: 5 },
-          ability: [{ action: 'manage', subject: 'all' }],
-          role: 'admin',
-        }
-        console.log(userToSave)
-        localStorage.setItem('userData', JSON.stringify(userToSave))
         this.loading = false
       }
     },

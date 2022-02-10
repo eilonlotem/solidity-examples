@@ -131,8 +131,12 @@ export default {
   },
   data() {
     return {
-      data: {},
+      data: {
+        username: this.$store.state.user,
+      },
     }
+  },
+  beforeCreate() {
   },
   created() {
     // data

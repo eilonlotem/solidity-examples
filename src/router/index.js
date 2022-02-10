@@ -4,7 +4,6 @@ import VueRouter from 'vue-router'
 // Routes
 import { canNavigate } from '@/libs/acl/routeProtection'
 import { isUserLoggedIn, getUserData, getHomeRouteForLoggedInUser } from '@/auth/utils'
-import { authGuard } from '../auth/authGuard'
 import apps from './routes/apps'
 import dashboard from './routes/dashboard'
 import uiElements from './routes/ui-elements/index'
@@ -12,6 +11,9 @@ import pages from './routes/pages'
 import chartsMaps from './routes/charts-maps'
 import formsTable from './routes/forms-tables'
 import others from './routes/others'
+import { authGuard } from '@/auth/authGuard'
+import store from '@/store'
+import { getInstance } from '@/auth'
 
 Vue.use(VueRouter)
 
@@ -23,42 +25,48 @@ const router = new VueRouter({
   },
   routes: [
     { path: '/', redirect: { name: 'dashboard-ecommerce' }, beforeEnter: authGuard },
-    ...apps,
     ...dashboard,
-    ...pages,
-    ...chartsMaps,
-    ...formsTable,
-    ...uiElements,
-    ...others,
     {
       path: '*',
       redirect: 'error-404',
     },
+    {
+      path: '/login',
+      name: 'auth-login',
+      component: () => import('@/views/pages/authentication/Login.vue'),
+      meta: {
+        layout: 'full',
+        resource: 'Auth',
+        redirectIfLoggedIn: true,
+      },
+    },
   ],
 })
 
-router.beforeEach((to, _, next) => {
-  const isLoggedIn = isUserLoggedIn()
+// router.beforeEach(async (to, _, next) => {
 
-  if (!canNavigate(to)) {
-    // Redirect to login if not logged in
-    if (!isLoggedIn) return next({ name: 'auth-login' })
+//   const authService = getInstance()
+//   const isLoggedIn = authService.isAuthenticated
 
-    // If logged in => not authorized
-    return next({ name: 'misc-not-authorized' })
-  }
+//   if (!canNavigate(to)) {
+//     // Redirect to login if not logged in
+//     if (!isLoggedIn) return next({ name: 'auth-login' })
 
-  const userData = getUserData()
-  console.log(userData)
-  // Redirect if logged in
-  if (to.meta.redirectIfLoggedIn && isLoggedIn) {
-    const userData = getUserData()
-    console.log(userData)
-    next(getHomeRouteForLoggedInUser(userData ? userData.role : null))
-  }
+//     // If logged in => not authorized
+//     return next({ name: 'misc-not-authorized' })
+//   }
 
-  return next()
-})
+//   console.log('to.meta.redirectIfLoggedIn', to.meta.redirectIfLoggedIn)
+//   console.log('isLoggedIn', isLoggedIn)
+//   // Redirect if logged in
+//   if (to.meta.redirectIfLoggedIn && isLoggedIn) {
+//     const userData = getUserData()
+//     console.log(userData)
+//     next(getHomeRouteForLoggedInUser(userData ? userData.role : null))
+//   }
+
+//   return next()
+// })
 
 // ? For splash screen
 // Remove afterEach hook if you are not using splash screen

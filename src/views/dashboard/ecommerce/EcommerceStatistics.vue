@@ -53,6 +53,7 @@
 import {
   BCard, BCardHeader, BCardTitle, BCardText, BCardBody, BRow, BCol, BMedia, BMediaAside, BAvatar, BMediaBody,
 } from 'bootstrap-vue'
+import store from '@/store'
 
 export default {
   components: {

@@ -6,7 +6,7 @@
     <b-card-header>
       <b-card-title>Statistics</b-card-title>
       <b-card-text class="mr-25 mb-0">
-        Updated 1 month ago
+        Updated 1 month ago {{username}}
       </b-card-text>
     </b-card-header>
     <b-card-body class="statistics-body">
@@ -53,6 +53,7 @@
 import {
   BCard, BCardHeader, BCardTitle, BCardText, BCardBody, BRow, BCol, BMedia, BMediaAside, BAvatar, BMediaBody,
 } from 'bootstrap-vue'
+import store from '@/store'
 
 export default {
   components: {
@@ -100,6 +101,7 @@ export default {
           customClass: '',
         },
       ],
+      username: store.state.user.username,
     }
   },
 }
