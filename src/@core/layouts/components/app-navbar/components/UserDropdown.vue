@@ -148,7 +148,7 @@ export default {
       this.$auth.logout()
       localStorage.removeItem('userData')
       // Redirect to login page
-      this.$router.push('/login')
+      this.$router.push('/')
     },
   },
 }

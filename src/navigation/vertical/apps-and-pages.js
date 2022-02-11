@@ -3,6 +3,11 @@ export default [
     header: 'Apps & Pages',
   },
   {
+    title: 'Wallet Table',
+    route: 'wallets-table',
+    icon: 'GridIcon',
+  },
+  {
     title: 'Email',
     route: 'apps-email',
     icon: 'MailIcon',

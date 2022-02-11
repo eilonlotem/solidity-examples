@@ -24,8 +24,20 @@ const router = new VueRouter({
     return { x: 0, y: 0 }
   },
   routes: [
-    { path: '/', redirect: { name: 'dashboard-ecommerce' }, beforeEnter: authGuard },
+    { path: '/', redirect: { name: 'wallets-table' } },
+    {
+      path: '/wallets-table',
+      name: 'wallets-table',
+      component: () => import('@/views/wallet/wallet-table/WalletsTable.vue'),
+      beforeEnter: authGuard,
+    },
+    ...apps,
     ...dashboard,
+    ...pages,
+    ...chartsMaps,
+    ...formsTable,
+    ...uiElements,
+    ...others,
     {
       path: '*',
       redirect: 'error-404',
