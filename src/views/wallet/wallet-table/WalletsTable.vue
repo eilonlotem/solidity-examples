@@ -158,10 +158,11 @@
 
 <script>
 import {
-  BAvatar, BBadge, BPagination, BFormSelect, BDropdown, BDropdownItem, BCard, BCardText, BCardTitle, BListGroup, BListGroupItem,
+  BAvatar, BBadge, BPagination, BFormSelect, BDropdown, BDropdownItem, BCard, BCardTitle, BListGroup, BListGroupItem,
 } from 'bootstrap-vue'
 import { VueGoodTable } from 'vue-good-table'
 import vSelect from 'vue-select'
+import { GET_TRANSACTIONS } from '@/graphql/queries';
 import store from '@/store/index'
 
 export default {
@@ -174,7 +175,6 @@ export default {
     BDropdown,
     BDropdownItem,
     BCard,
-    BCardText,
     BCardTitle,
     BListGroup,
     BListGroupItem,
@@ -182,6 +182,7 @@ export default {
   },
   data() {
     return {
+      test: [],
       item: null,
       options: [
 
@@ -232,6 +233,11 @@ export default {
       searchTerm: '',
     }
   },
+  apollo: {
+    test: {
+      query: GET_TRANSACTIONS,
+    },
+  },
   computed: {
     statusVariant() {
       const statusColor = {
@@ -270,6 +276,10 @@ export default {
       })
       this.columns = [...firstsValue, ...itemsToAdd, ...lastValue]
     },
+    test(val, old) {
+      console.log(val);
+      console.log(old);
+    }
   },
   created() {
     this.$http.get('/good-table/basic')

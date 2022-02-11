@@ -12,6 +12,8 @@ import { domain, clientId } from '../auth_config.json'
 
 import { Auth0Plugin } from './auth'
 
+import { apolloProvider } from './graphql/apollo';
+
 // Global Components
 import './global-components'
 
@@ -65,5 +67,6 @@ new Vue({
   router,
   store,
   i18n,
+  apolloProvider,
   render: h => h(App),
 }).$mount('#app')
