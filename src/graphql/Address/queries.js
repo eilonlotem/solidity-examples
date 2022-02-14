@@ -23,3 +23,12 @@ export const DELETE_ADDRESS = id => (gql`mutation MyMutation {
     address
   }
 }`)
+
+export const ADD_ADDRESS = (name, address, blockchain, description, internal) => (gql`mutation MyMutation2 {
+  __typename
+  updateAddress(address: "${address}", blockchain: "${blockchain}", description: "${description}", internal: ${internal}, name: "${name}") {
+    address {
+      address
+    }
+  }
+}`)

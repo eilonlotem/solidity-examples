@@ -20,9 +20,25 @@
           </template>
         </b-list-group-item>
         <b-list-group-item>
-          <h5 class="display-5">
-            Wallets Table
-          </h5>
+
+          <b-row class="mb-1">
+            <b-col md="8">
+              <h5 class="display-5">
+                Wallets Table
+              </h5>
+            </b-col>
+            <b-col md="4">
+              <b-button
+                v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+                v-b-toggle.sidebar-right
+                block
+                variant="primary"
+              >
+                Add Address
+              </b-button>
+            </b-col>
+          </b-row>
+
           <!-- table -->
           <vue-good-table
             :columns="columns"
@@ -143,16 +159,24 @@
         </b-list-group-item>
 
       </b-list-group>
-
     </b-card>
+    <b-sidebar
+      id="sidebar-right"
+      right
+      shadow
+    >
+      <add-adress-form />
+    </b-sidebar>
   </fragment>
 </template>
 
 <script>
 import {
-  BAvatar, BBadge, BPagination, BFormSelect, BDropdown, BDropdownItem, BCard, BCardTitle, BListGroup, BListGroupItem,
+  BAvatar, BBadge, BPagination, BFormSelect, BDropdown, BDropdownItem, BCard, BCardTitle, BListGroup, BListGroupItem, BButton, BRow, BCol, BSidebar, VBToggle,
 } from 'bootstrap-vue'
 import { VueGoodTable } from 'vue-good-table'
+import AddAdressForm from '@/views/forms/form-addAddress/AddAdressForm.vue'
+import Ripple from 'vue-ripple-directive'
 import vSelect from 'vue-select'
 import { GET_ALL_ADDRESSES, DELETE_ADDRESS } from '@/graphql/Address/queries'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
@@ -171,7 +195,16 @@ export default {
     BCardTitle,
     BListGroup,
     BListGroupItem,
+    BButton,
+    BRow,
+    BCol,
+    BSidebar,
     vSelect,
+    AddAdressForm,
+  },
+  directives: {
+    Ripple,
+    'b-toggle': VBToggle,
   },
   data() {
     return {
@@ -310,13 +343,9 @@ export default {
     addColumnToTable(newValue) {
       this.columns = [...newValue, ...this.columns]
     },
-    removeColumnToTable() {
-      console.log(this.item)
-    },
-    deleteAddress(id) {
-      this.$apollo.mutate({
-        mutation: DELETE_ADDRESS(id),
-      }).then(data => {
+    async deleteAddress(id) {
+      try {
+        await this.$apollo.mutate({ mutation: DELETE_ADDRESS(id) })
         this.$toast({
           component: ToastificationContent,
           position: 'top-right',
@@ -328,9 +357,9 @@ export default {
           },
         })
         this.$apollo.queries.allMyAddresses.refetch()
-      }).catch(error => {
-        console.error(error)
-      })
+      } catch (error) {
+        console.log(error)
+      }
     },
   },
 }
