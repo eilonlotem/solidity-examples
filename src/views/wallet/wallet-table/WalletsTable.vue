@@ -11,7 +11,6 @@
           </h6>
           <template>
             <v-select
-              v-model="item"
               :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
               multiple
               label="label"
@@ -27,7 +26,7 @@
           <!-- table -->
           <vue-good-table
             :columns="columns"
-            :rows="rows"
+            :rows="allMyAddresses"
             :rtl="direction"
             :search-options="{
               enabled: true,
@@ -76,14 +75,7 @@
                         class="text-body align-middle mr-25"
                       />
                     </template>
-                    <b-dropdown-item>
-                      <feather-icon
-                        icon="Edit2Icon"
-                        class="mr-50"
-                      />
-                      <span>Edit</span>
-                    </b-dropdown-item>
-                    <b-dropdown-item>
+                    <b-dropdown-item @click="()=>deleteAddress(props.row.id)">
                       <feather-icon
                         icon="TrashIcon"
                         class="mr-50"
@@ -162,7 +154,8 @@ import {
 } from 'bootstrap-vue'
 import { VueGoodTable } from 'vue-good-table'
 import vSelect from 'vue-select'
-import { GET_TRANSACTIONS } from '@/graphql/queries';
+import { GET_ALL_ADDRESSES, DELETE_ADDRESS } from '@/graphql/Address/queries'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import store from '@/store/index'
 
 export default {
@@ -182,10 +175,9 @@ export default {
   },
   data() {
     return {
-      test: [],
+      allMyAddresses: [],
       item: null,
       options: [
-
         {
           label: 'Date',
           field: 'startDate',
@@ -211,19 +203,47 @@ export default {
       columns: [
         {
           label: 'Name',
-          field: 'fullName',
+          field: 'name',
           filterOptions: {
             enabled: true,
             placeholder: 'Search Name',
           },
         },
         {
-          label: 'Email',
-          field: 'email',
+          label: 'Address',
+          field: 'address',
           filterOptions: {
             enabled: true,
-            placeholder: 'Search Email',
+            placeholder: 'Search Adress',
           },
+        },
+        {
+          label: 'Blockchain',
+          field: 'blockchain',
+          filterOptions: {
+            enabled: true,
+            placeholder: 'Search Blockchain',
+          },
+        },
+        {
+          label: 'Description',
+          field: 'description',
+          filterOptions: {
+            enabled: true,
+            placeholder: 'Search Description',
+          },
+        },
+        {
+          label: 'Total Transactions',
+          field: 'totalTransactions',
+        },
+        {
+          label: 'Type',
+          field: 'type',
+        },
+        {
+          label: 'Internal',
+          field: 'internal',
         },
         {
           label: 'Action',
@@ -234,8 +254,9 @@ export default {
     }
   },
   apollo: {
-    test: {
-      query: GET_TRANSACTIONS,
+    allMyAddresses: {
+      query: GET_ALL_ADDRESSES,
+      update: data => data.allMyAddresses.results,
     },
   },
   computed: {
@@ -276,10 +297,10 @@ export default {
       })
       this.columns = [...firstsValue, ...itemsToAdd, ...lastValue]
     },
-    test(val, old) {
-      console.log(val);
-      console.log(old);
-    }
+    allMyAddresses(val, old) {
+      console.log(val)
+      console.log(old)
+    },
   },
   created() {
     this.$http.get('/good-table/basic')
@@ -291,6 +312,25 @@ export default {
     },
     removeColumnToTable() {
       console.log(this.item)
+    },
+    deleteAddress(id) {
+      this.$apollo.mutate({
+        mutation: DELETE_ADDRESS(id),
+      }).then(data => {
+        this.$toast({
+          component: ToastificationContent,
+          position: 'top-right',
+          props: {
+            title: 'Information',
+            icon: 'ThumbsUpIcon',
+            variant: 'success',
+            text: 'You have successfully delete the address',
+          },
+        })
+        this.$apollo.queries.allMyAddresses.refetch()
+      }).catch(error => {
+        console.error(error)
+      })
     },
   },
 }

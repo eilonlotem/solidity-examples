@@ -1,4 +1,5 @@
 {
-    "domain": "tres-finance.us.auth0.com",
-    "clientId": "YbnHKyQLCxhX88l0U5JbjkFkszjv4iYS"
-  }
+  "domain": "tres-finance.us.auth0.com",
+  "clientId": "YbnHKyQLCxhX88l0U5JbjkFkszjv4iYS",
+  "audience": "https://app.tres.finance"
+}

@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import createAuth0Client from '@auth0/auth0-spa-js'
-import store from '@/store'
 /** Define a default action to perform after authentication */
 const DEFAULT_REDIRECT_CALLBACK = () => {
   console.log('DEFAULT_REDIRECT_CALLBACK')
