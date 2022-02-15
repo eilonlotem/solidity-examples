@@ -22,6 +22,7 @@
 
           <!-- table -->
           <vue-good-table
+            :is-loading="apolloLoading"
             style-class="vgt-table"
             :columns="columns"
             :rows="allMyAddresses"
@@ -212,6 +213,7 @@ export default {
       columns: tableColumns,
       rows: [],
       searchTerm: '',
+      apolloLoading: 0,
     }
   },
   apollo: {
