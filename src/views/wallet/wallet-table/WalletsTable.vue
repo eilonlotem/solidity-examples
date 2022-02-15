@@ -130,7 +130,7 @@
                     prev-class="prev-item"
                     next-class="next-item"
                     class="mt-1 mb-0"
-                    @input="nextPage"
+                    @input="(value)=>nextPage({currentPage:value})"
                   >
                     <template #prev-text>
                       <feather-icon
@@ -246,6 +246,7 @@ export default {
       query: GET_ALL_ADDRESSES,
       update: data => data.allMyAddresses.results,
       result({ data, loading }) {
+        console.log('data', data)
         if (!loading) {
           this.totalRows = data.allMyAddresses.totalCount
         }
@@ -257,13 +258,17 @@ export default {
     },
   },
   methods: {
-    nextPage() {
-      this.limit += 10
-      this.offset = this.limit
+    nextPage(value) {
+      // this.offset = this.limit
+      const offset = (value.currentPage - 1) * 10
       this.$apollo.queries.allMyAddresses.fetchMore({
         variables: {
-          page: this.page,
-          offset: this.offset,
+          limit: 10,
+          offset,
+        },
+        updateQuery(previousResult, { fetchMoreResult }) {
+        // this.totalRows = fetchMoreResult.allMyAddresses.totalCount
+          return fetchMoreResult
         },
       })
     },
