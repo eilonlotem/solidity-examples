@@ -17,7 +17,7 @@ const link = onError(({ graphQLErrors, networkError }) => {
 })
 
 const httpLink = createHttpLink({
-  uri: process.env.VUE_APP_SOURCELINK_API_URL || 'http://ecsst-backe-1up70t3f3mxnb-737315864.us-east-1.elb.amazonaws.com/graphql',
+  uri: process.env.VUE_APP_SOURCELINK_API_URL || 'https://api.dev.tres.finance/graphql',
 })
 
 const authLink = setContext((_, { headers }) => {

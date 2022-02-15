@@ -205,13 +205,10 @@ export default {
   data() {
     return {
       allMyAddresses: [],
-      selectedItem: null,
-      options: selectOptions,
+      selectedItem: tableColumns,
+      options: tableColumns.concat(selectOptions),
       pageLength: 3,
       dir: false,
-      defaultColumns: [
-
-      ],
       columns: tableColumns,
       rows: [],
       searchTerm: '',
@@ -237,16 +234,13 @@ export default {
   },
   watch: {
     selectedItem(val, oldVal) {
-      const itemsToAdd = []
-      const firstsValue = this.columns.slice(0, 4)
-      const lastValue = this.columns.slice(-1)
-      val.forEach(element => {
-        const existValue = this.columns.indexOf(element)
-        if (existValue) {
-          itemsToAdd.push(element)
-        }
-      })
-      this.columns = [...firstsValue, ...itemsToAdd, ...lastValue]
+      const actionItem = val.find(item => item.field === 'action')
+      if (actionItem) {
+        const columnWithOutAction = val.filter(item => item.field !== 'action')
+        this.columns = [...columnWithOutAction].concat(actionItem)
+        return
+      }
+      this.columns = [...val]
     },
   },
   methods: {
