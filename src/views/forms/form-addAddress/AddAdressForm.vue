@@ -1,120 +1,150 @@
 <template>
-  <validation-observer ref="simpleRules">
-    <b-form>
-      <b-row>
-        <b-col md="12">
-          <b-form-group>
-            <label>Name</label>
-            <validation-provider
-              #default="{ errors }"
-              name="Name"
-            >
-              <b-form-input
-                v-model="name"
-                :state="errors.length > 0 ? false:null"
-                placeholder="Name"
-              />
-              <small class="text-danger">{{ errors[0] }}</small>
-            </validation-provider>
-          </b-form-group>
-        </b-col>
-
-        <b-col md="12">
-          <b-form-group>
-            <label>Address</label>
-            <validation-provider
-              #default="{ errors }"
-              name="Address"
-            >
-              <b-form-input
-                v-model="address"
-                :state="errors.length > 0 ? false:null"
-                placeholder="Address"
-              />
-              <small class="text-danger">{{ errors[0] }}</small>
-            </validation-provider>
-          </b-form-group>
-        </b-col>
-
-        <b-col md="12">
-          <b-form-group>
-            <label>Blockchain</label>
-            <validation-provider
-              #default="{ errors }"
-              name="Blockchain"
-            >
-              <b-form-input
-                v-model="blockchain"
-                :state="errors.length > 0 ? false:null"
-                placeholder="Blockchain"
-              />
-              <small class="text-danger">{{ errors[0] }}</small>
-            </validation-provider>
-          </b-form-group>
-        </b-col>
-
-        <b-col md="12">
-          <b-form-group>
-            <label>Description</label>
-            <validation-provider
-              #default="{ errors }"
-              name="Description"
-            >
-              <b-form-input
-                v-model="description"
-                :state="errors.length > 0 ? false:null"
-                placeholder="Description"
-              />
-              <small class="text-danger">{{ errors[0] }}</small>
-            </validation-provider>
-          </b-form-group>
-        </b-col>
-
-        <b-col md="12">
-          <b-form-group>
-            <validation-provider
-              #default="{ errors }"
-              rules="required"
-              name="Internal"
-            >
-              <b-form-checkbox
-                v-model="internal"
-                checked="true"
-                name="internal"
-                switch
-                inline
+  <b-card class="shadow-none">
+    <div class="customizer-section d-flex justify-content-between align-items-center">
+      <div>
+        <h4 class="text-uppercase mb-0">
+          Add Address
+        </h4>
+      </div>
+      <feather-icon
+        v-b-toggle.add-address-sidebar
+        icon="XIcon"
+        size="18"
+        class="cursor-pointer"
+      />
+    </div>
+    <hr>
+    <validation-observer ref="simpleRules">
+      <b-form>
+        <b-row>
+          <b-col md="12">
+            <b-form-group>
+              <label>Name</label>
+              <validation-provider
+                #default="{ errors }"
+                name="Name"
               >
-                Internal
-              </b-form-checkbox>
-              <small class="text-danger">{{ errors[0] }}</small>
-            </validation-provider>
-          </b-form-group>
-        </b-col>
+                <b-form-input
+                  v-model="name"
+                  :state="errors.length > 0 ? false:null"
+                  placeholder="Name"
+                />
+                <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
+            </b-form-group>
+          </b-col>
 
-        <!-- submit button -->
-        <b-col cols="12">
-          <b-button
-            variant="primary"
-            type="submit"
-            @click.prevent="validationForm"
-          >
-            Submit
-          </b-button>
-        </b-col>
-      </b-row>
-    </b-form>
-  </validation-observer>
+          <b-col md="12">
+            <b-form-group>
+              <label>Address</label>
+              <validation-provider
+                #default="{ errors }"
+                name="Address"
+              >
+                <b-form-input
+                  v-model="address"
+                  :state="errors.length > 0 ? false:null"
+                  placeholder="Address"
+                />
+                <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
+            </b-form-group>
+          </b-col>
+
+          <b-col md="12">
+            <b-form-group>
+              <label>Blockchain</label>
+              <validation-provider
+                #default="{ errors }"
+                name="Blockchain"
+              >
+                <b-form-input
+                  v-model="blockchain"
+                  :state="errors.length > 0 ? false:null"
+                  placeholder="Blockchain"
+                />
+                <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
+            </b-form-group>
+          </b-col>
+
+          <b-col md="12">
+            <b-form-group>
+              <label>Description</label>
+              <validation-provider
+                #default="{ errors }"
+                name="Description"
+              >
+                <b-form-input
+                  v-model="description"
+                  :state="errors.length > 0 ? false:null"
+                  placeholder="Description"
+                />
+                <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
+            </b-form-group>
+          </b-col>
+
+          <b-col md="3">
+            Internal
+          </b-col>
+
+          <b-col md="8">
+            <b-form-group>
+              <validation-provider
+                #default="{ errors }"
+                rules="required"
+                name="Internal"
+              >
+                <b-form-checkbox
+                  v-model="internal"
+                  checked="true"
+                  name="internal"
+                  switch
+                  inline
+                />
+                <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
+            </b-form-group>
+          </b-col>
+
+          <!-- submit button -->
+
+          <b-col offset-md="2">
+            <b-button
+              v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+              type="submit"
+              variant="primary"
+              class="mr-1"
+              @click.prevent="validationForm"
+            >
+              Add Address
+            </b-button>
+            <b-button
+              v-ripple.400="'rgba(186, 191, 199, 0.15)'"
+              type="reset"
+              variant="outline-secondary"
+            >
+              Reset
+            </b-button>
+          </b-col>
+
+        </b-row>
+      </b-form>
+    </validation-observer>
+  </b-card>
 </template>
 
 <script>
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import {
-  BFormInput, BFormGroup, BForm, BRow, BCol, BButton, BFormCheckbox,
+  BFormInput, BFormGroup, BForm, BRow, BCol, BButton, BFormCheckbox, BCard, VBToggle,
 } from 'bootstrap-vue'
 import {
   required,
 } from '@validations'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import Ripple from 'vue-ripple-directive'
 
 import { ADD_ADDRESS } from '@/graphql/Address/queries'
 
@@ -129,6 +159,11 @@ export default {
     BCol,
     BButton,
     BFormCheckbox,
+    BCard,
+  },
+  directives: {
+    Ripple,
+    'b-toggle': VBToggle,
   },
   data() {
     return {

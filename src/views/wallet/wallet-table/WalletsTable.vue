@@ -1,9 +1,6 @@
 <template>
   <fragment>
-    <b-card>
-      <b-card-title>
-        Wallets Table
-      </b-card-title>
+    <b-card title="Wallets Table">
       <b-list-group>
         <b-list-group-item>
           <h6 class="display-6">
@@ -11,6 +8,7 @@
           </h6>
           <template>
             <v-select
+              v-model="selectedItem"
               :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
               multiple
               label="label"
@@ -19,28 +17,12 @@
             />
           </template>
         </b-list-group-item>
-        <b-list-group-item>
 
-          <b-row class="mb-1">
-            <b-col md="8">
-              <h5 class="display-5">
-                Wallets Table
-              </h5>
-            </b-col>
-            <b-col md="4">
-              <b-button
-                v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-                v-b-toggle.sidebar-right
-                block
-                variant="primary"
-              >
-                Add Address
-              </b-button>
-            </b-col>
-          </b-row>
+        <b-list-group-item>
 
           <!-- table -->
           <vue-good-table
+            style-class="vgt-table"
             :columns="columns"
             :rows="allMyAddresses"
             :rtl="direction"
@@ -52,6 +34,16 @@
               perPage:pageLength
             }"
           >
+            <div slot="table-actions">
+              <b-button
+                v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+                v-b-toggle.add-address-sidebar
+                block
+                variant="primary"
+              >
+                Add Address
+              </b-button>
+            </div>
             <template
               slot="table-row"
               slot-scope="props"
@@ -161,9 +153,12 @@
       </b-list-group>
     </b-card>
     <b-sidebar
-      id="sidebar-right"
-      right
+      id="add-address-sidebar"
       shadow
+      right
+      backdrop
+      bg-variant="white"
+      no-header
     >
       <add-adress-form />
     </b-sidebar>
@@ -179,6 +174,7 @@ import AddAdressForm from '@/views/forms/form-addAddress/AddAdressForm.vue'
 import Ripple from 'vue-ripple-directive'
 import vSelect from 'vue-select'
 import { GET_ALL_ADDRESSES, DELETE_ADDRESS } from '@/graphql/Address/queries'
+import { tableColumns, selectOptions } from '@/views/wallet/wallet-table/utils'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import store from '@/store/index'
 
@@ -209,79 +205,14 @@ export default {
   data() {
     return {
       allMyAddresses: [],
-      item: null,
-      options: [
-        {
-          label: 'Date',
-          field: 'startDate',
-          filterOptions: {
-            enabled: true,
-            placeholder: 'Search Date',
-          },
-        },
-        {
-          label: 'Salary',
-          field: 'salary',
-          filterOptions: {
-            enabled: true,
-            placeholder: 'Search Salary',
-          },
-        },
-      ],
+      selectedItem: null,
+      options: selectOptions,
       pageLength: 3,
       dir: false,
       defaultColumns: [
 
       ],
-      columns: [
-        {
-          label: 'Name',
-          field: 'name',
-          filterOptions: {
-            enabled: true,
-            placeholder: 'Search Name',
-          },
-        },
-        {
-          label: 'Address',
-          field: 'address',
-          filterOptions: {
-            enabled: true,
-            placeholder: 'Search Adress',
-          },
-        },
-        {
-          label: 'Blockchain',
-          field: 'blockchain',
-          filterOptions: {
-            enabled: true,
-            placeholder: 'Search Blockchain',
-          },
-        },
-        {
-          label: 'Description',
-          field: 'description',
-          filterOptions: {
-            enabled: true,
-            placeholder: 'Search Description',
-          },
-        },
-        {
-          label: 'Total Transactions',
-          field: 'totalTransactions',
-        },
-        {
-          label: 'Type',
-          field: 'type',
-        },
-        {
-          label: 'Internal',
-          field: 'internal',
-        },
-        {
-          label: 'Action',
-          field: 'action',
-        }],
+      columns: tableColumns,
       rows: [],
       searchTerm: '',
     }
@@ -293,19 +224,6 @@ export default {
     },
   },
   computed: {
-    statusVariant() {
-      const statusColor = {
-        /* eslint-disable key-spacing */
-        Current      : 'light-primary',
-        Professional : 'light-success',
-        Rejected     : 'light-danger',
-        Resigned     : 'light-warning',
-        Applied      : 'light-info',
-        /* eslint-enable key-spacing */
-      }
-
-      return status => statusColor[status]
-    },
     direction() {
       if (store.state.appConfig.isRTL) {
         // eslint-disable-next-line vue/no-side-effects-in-computed-properties
@@ -318,9 +236,9 @@ export default {
     },
   },
   watch: {
-    item(val, oldVal) {
+    selectedItem(val, oldVal) {
       const itemsToAdd = []
-      const firstsValue = this.columns.slice(0, 2)
+      const firstsValue = this.columns.slice(0, 4)
       const lastValue = this.columns.slice(-1)
       val.forEach(element => {
         const existValue = this.columns.indexOf(element)
@@ -330,19 +248,8 @@ export default {
       })
       this.columns = [...firstsValue, ...itemsToAdd, ...lastValue]
     },
-    allMyAddresses(val, old) {
-      console.log(val)
-      console.log(old)
-    },
-  },
-  created() {
-    this.$http.get('/good-table/basic')
-      .then(res => { this.rows = res.data })
   },
   methods: {
-    addColumnToTable(newValue) {
-      this.columns = [...newValue, ...this.columns]
-    },
     async deleteAddress(id) {
       try {
         await this.$apollo.mutate({ mutation: DELETE_ADDRESS(id) })
@@ -367,4 +274,7 @@ export default {
 
 <style lang="scss" >
   @import '@core/scss/vue/libs/vue-good-table.scss';
+  .b-sidebar {
+    width: 400px !important;
+  }
 </style>
