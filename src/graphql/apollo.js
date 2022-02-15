@@ -1,10 +1,12 @@
 import Vue from 'vue'
+// import { useToast } from 'vue-toastification/composition'
 import { ApolloClient } from 'apollo-client'
 import { createHttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import VueApollo from 'vue-apollo'
 import { setContext } from 'apollo-link-context'
 import { onError } from 'apollo-link-error'
+// import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 
 const link = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
@@ -13,7 +15,21 @@ const link = onError(({ graphQLErrors, networkError }) => {
     ))
   }
 
-  if (networkError) console.log(`[Network error]: ${networkError}`)
+  if (networkError) {
+    // const toast = useToast();
+    // console.log('sdfsdf',useToast());
+    // toast({
+    //   component: ToastificationContent,
+    //   position: 'top-right',
+    //   props: {
+    //     title: 'Error',
+    //     icon: 'InfoIcon ',
+    //     variant: 'error',
+    //     text: `[Network error]: ${networkError}`,
+    //   },
+    // })
+    console.log(`[Network error]: ${networkError}`)
+  }
 })
 
 const httpLink = createHttpLink({

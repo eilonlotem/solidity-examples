@@ -1,8 +1,9 @@
 import gql from 'graphql-tag'
 
-export const GET_ALL_ADDRESSES = gql`
+export const GET_ALL_ADDRESSES = (limit = 10, offset = 0) => gql`
 query MyQuery {
-  allMyAddresses(internalOnly: false) {
+  allMyAddresses(internalOnly: false, limit: ${limit}, offset: ${offset}) {
+    totalCount
     results {
       address
       blockchain

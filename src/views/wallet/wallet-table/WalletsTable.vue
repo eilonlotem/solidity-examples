@@ -2,7 +2,7 @@
   <fragment>
     <b-card title="Wallets Table">
       <b-list-group>
-        <b-list-group-item>
+        <b-list-group-item v-if="!apolloLoading ? true: false">
           <h6 class="display-6">
             Chose the columns you want to see
           </h6>
@@ -22,7 +22,7 @@
 
           <!-- table -->
           <vue-good-table
-            :is-loading="apolloLoading"
+            :is-loading="apolloLoading ? true: false"
             style-class="vgt-table"
             :columns="columns"
             :rows="allMyAddresses"
@@ -117,12 +117,12 @@
                     class="mx-1"
                     @input="(value)=>props.perPageChanged({currentPerPage:value})"
                   />
-                  <span class="text-nowrap "> of {{ props.total }} entries </span>
+                  <span class="text-nowrap "> of {{ totalRows }} entries </span>
                 </div>
                 <div>
                   <b-pagination
                     :value="1"
-                    :total-rows="props.total"
+                    :total-rows="totalRows"
                     :per-page="pageLength"
                     first-number
                     last-number
@@ -130,7 +130,7 @@
                     prev-class="prev-item"
                     next-class="next-item"
                     class="mt-1 mb-0"
-                    @input="(value)=>props.pageChanged({currentPage:value})"
+                    @input="nextPage"
                   >
                     <template #prev-text>
                       <feather-icon
@@ -208,20 +208,16 @@ export default {
       allMyAddresses: [],
       selectedItem: tableColumns,
       options: tableColumns.concat(selectOptions),
-      pageLength: 3,
+      pageLength: 10,
       dir: false,
       columns: tableColumns,
       rows: [],
+      totalRows: 0,
       searchTerm: '',
       apolloLoading: 0,
     }
   },
-  apollo: {
-    allMyAddresses: {
-      query: GET_ALL_ADDRESSES,
-      update: data => data.allMyAddresses.results,
-    },
-  },
+
   computed: {
     direction() {
       if (store.state.appConfig.isRTL) {
@@ -245,7 +241,32 @@ export default {
       this.columns = [...val]
     },
   },
+  apollo: {
+    allMyAddresses: {
+      query: GET_ALL_ADDRESSES,
+      update: data => data.allMyAddresses.results,
+      result({ data, loading }) {
+        if (!loading) {
+          this.totalRows = data.allMyAddresses.totalCount
+        }
+      },
+      variables: {
+        limit: 10,
+        offset: 0,
+      },
+    },
+  },
   methods: {
+    nextPage() {
+      this.limit += 10
+      this.offset = this.limit
+      this.$apollo.queries.allMyAddresses.fetchMore({
+        variables: {
+          page: this.page,
+          offset: this.offset,
+        },
+      })
+    },
     async deleteAddress(id) {
       try {
         await this.$apollo.mutate({ mutation: DELETE_ADDRESS(id) })
