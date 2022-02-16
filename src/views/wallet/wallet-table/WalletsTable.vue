@@ -1,154 +1,33 @@
 <template>
   <fragment>
     <b-card title="Wallets Table">
-      <b-list-group>
+      <b-list-group class="wallets-group">
         <b-list-group-item v-if="!apolloLoading ? true: false">
           <h6 class="display-6">
             Chose the columns you want to see
           </h6>
           <template>
-            <v-select
-              v-model="selectedItem"
-              :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-              multiple
-              label="label"
+            <column-selecter
               :options="options"
-              :clearable="false"
+              :selected-item="selectedItem"
+              @changeSelectedItems="changeSelectedItems($event)"
             />
           </template>
         </b-list-group-item>
 
         <b-list-group-item>
 
-          <!-- table -->
-          <vue-good-table
-            :is-loading="apolloLoading ? true: false"
-            style-class="vgt-table"
+          <our-table
             :columns="columns"
-            :rows="allMyAddresses"
-            :rtl="direction"
-            :search-options="{
-              enabled: true,
-              externalQuery: searchTerm }"
-            :pagination-options="{
-              enabled: true,
-              perPage:pageLength
-            }"
-          >
-            <div slot="table-actions">
-              <b-button
-                v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-                v-b-toggle.add-address-sidebar
-                block
-                variant="primary"
-              >
-                Add Address
-              </b-button>
-            </div>
-            <template
-              slot="table-row"
-              slot-scope="props"
-            >
+            :data="allMyAddresses"
+            :page-length="pageLength"
+            :is-loading="apolloLoading ? true: false"
+            :add-button-text="'Add Address'"
+            :delete-call-back="deleteAddress"
+            :total-rows="totalRows"
+            :next-page="nextPage"
+          />
 
-              <!-- Column: Name -->
-              <div
-                v-if="props.column.field === 'fullName'"
-                class="text-nowrap"
-              >
-                <b-avatar
-                  :src="props.row.avatar"
-                  class="mx-1"
-                />
-                <span class="text-nowrap">{{ props.row.fullName }}</span>
-              </div>
-
-              <!-- Column: Status -->
-              <span v-else-if="props.column.field === 'status'">
-                <b-badge :variant="statusVariant(props.row.status)">
-                  {{ props.row.status }}
-                </b-badge>
-              </span>
-
-              <!-- Column: Action -->
-              <span v-else-if="props.column.field === 'action'">
-                <span>
-                  <b-dropdown
-                    variant="link"
-                    toggle-class="text-decoration-none"
-                    no-caret
-                  >
-                    <template v-slot:button-content>
-                      <feather-icon
-                        icon="MoreVerticalIcon"
-                        size="16"
-                        class="text-body align-middle mr-25"
-                      />
-                    </template>
-                    <b-dropdown-item @click="()=>deleteAddress(props.row.id)">
-                      <feather-icon
-                        icon="TrashIcon"
-                        class="mr-50"
-                      />
-                      <span>Delete</span>
-                    </b-dropdown-item>
-                  </b-dropdown>
-                </span>
-              </span>
-
-              <!-- Column: Common -->
-              <span v-else>
-                {{ props.formattedRow[props.column.field] }}
-              </span>
-            </template>
-
-            <!-- pagination -->
-            <template
-              slot="pagination-bottom"
-              slot-scope="props"
-            >
-              <div class="d-flex justify-content-between flex-wrap">
-                <div class="d-flex align-items-center mb-0 mt-1">
-                  <span class="text-nowrap">
-                    Showing 1 to
-                  </span>
-                  <b-form-select
-                    v-model="pageLength"
-                    :options="['3','5','10']"
-                    class="mx-1"
-                    @input="(value)=>props.perPageChanged({currentPerPage:value})"
-                  />
-                  <span class="text-nowrap "> of {{ totalRows }} entries </span>
-                </div>
-                <div>
-                  <b-pagination
-                    :value="1"
-                    :total-rows="totalRows"
-                    :per-page="pageLength"
-                    first-number
-                    last-number
-                    align="right"
-                    prev-class="prev-item"
-                    next-class="next-item"
-                    class="mt-1 mb-0"
-                    @input="(value)=>nextPage({currentPage:value})"
-                  >
-                    <template #prev-text>
-                      <feather-icon
-                        icon="ChevronLeftIcon"
-                        size="18"
-                      />
-                    </template>
-                    <template #next-text>
-                      <feather-icon
-                        icon="ChevronRightIcon"
-                        size="18"
-                      />
-                    </template>
-                  </b-pagination>
-                </div>
-              </div>
-            </template>
-          </vue-good-table>
         </b-list-group-item>
 
       </b-list-group>
@@ -168,36 +47,26 @@
 
 <script>
 import {
-  BAvatar, BBadge, BPagination, BFormSelect, BDropdown, BDropdownItem, BCard, BCardTitle, BListGroup, BListGroupItem, BButton, BRow, BCol, BSidebar, VBToggle,
+   BCard, BListGroup, BListGroupItem, BSidebar, VBToggle,
 } from 'bootstrap-vue'
-import { VueGoodTable } from 'vue-good-table'
 import AddAdressForm from '@/views/forms/form-addAddress/AddAdressForm.vue'
 import Ripple from 'vue-ripple-directive'
-import vSelect from 'vue-select'
 import { GET_ALL_ADDRESSES, DELETE_ADDRESS } from '@/graphql/Address/queries'
 import { tableColumns, selectOptions } from '@/views/wallet/wallet-table/utils'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import OurTable from '@core/components/table/OurTable.vue'
+import ColumnSelecter from '@core/components/column-selecter/ColumnSelecter.vue'
 import store from '@/store/index'
 
 export default {
   components: {
-    VueGoodTable,
-    BAvatar,
-    BBadge,
-    BPagination,
-    BFormSelect,
-    BDropdown,
-    BDropdownItem,
     BCard,
-    BCardTitle,
     BListGroup,
     BListGroupItem,
-    BButton,
-    BRow,
-    BCol,
     BSidebar,
-    vSelect,
     AddAdressForm,
+    OurTable,
+    ColumnSelecter,
   },
   directives: {
     Ripple,
@@ -217,7 +86,6 @@ export default {
       apolloLoading: 0,
     }
   },
-
   computed: {
     direction() {
       if (store.state.appConfig.isRTL) {
@@ -258,6 +126,9 @@ export default {
     },
   },
   methods: {
+    changeSelectedItems(items) {
+      this.selectedItem = items
+    },
     nextPage(value) {
       // this.offset = this.limit
       const offset = (value.currentPage - 1) * 10
@@ -298,5 +169,17 @@ export default {
   @import '@core/scss/vue/libs/vue-good-table.scss';
   .b-sidebar {
     width: 400px !important;
+  }
+  .wallets-group .list-group-item {
+    border: 0px !important;
+  }
+  .wallets-group .list-group-item:hover {
+    background-color: white !important;
+  }
+  .wallets-group table {
+    border: 0px !important;
+  }
+  .wallets-group .vgt-global-search {
+    border: 0px !important;
   }
 </style>
