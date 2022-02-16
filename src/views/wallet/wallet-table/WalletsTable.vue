@@ -1,37 +1,45 @@
 <template>
-  <fragment>
-    <b-card title="Wallets Table">
-      <b-list-group class="wallets-group">
-        <b-list-group-item v-if="!apolloLoading ? true: false">
-          <h6 class="display-6">
-            Chose the columns you want to see
-          </h6>
-          <template>
+  <b-card title="Wallets Table">
+    <b-list-group class="wallets-group">
+      <b-list-group-item>
+        <div
+          v-if="!apolloLoading ? true: false"
+          class="d-flex justify-content-between align-items-end"
+        >
+          <div class="select-column-section">
+            <h6 class="display-6">
+              Chose the columns you want to see
+            </h6>
             <column-selecter
               :options="options"
               :selected-item="selectedItem"
               @changeSelectedItems="changeSelectedItems($event)"
             />
-          </template>
-        </b-list-group-item>
-
-        <b-list-group-item>
-
-          <our-table
-            :columns="columns"
-            :data="allMyAddresses"
-            :page-length="pageLength"
-            :is-loading="apolloLoading ? true: false"
-            :add-button-text="'Add Address'"
-            :delete-call-back="deleteAddress"
-            :total-rows="totalRows"
-            :next-page="nextPage"
-          />
-
-        </b-list-group-item>
-
-      </b-list-group>
-    </b-card>
+          </div>
+          <div class="button-section d-flex align-item-end">
+            <b-button
+              v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+              v-b-toggle.add-address-sidebar
+              style="{height: '50%'}"
+              block
+              variant="primary"
+            >
+              Add Address
+            </b-button>
+          </div>
+        </div>
+      </b-list-group-item>
+      <b-list-group-item>
+        <our-table
+          :columns="columns"
+          :data="allMyAddresses"
+          :is-loading="apolloLoading ? true: false"
+          :delete-call-back="deleteAddress"
+          :total-rows="totalRows"
+          :next-page="nextPage"
+        />
+      </b-list-group-item>
+    </b-list-group>
     <b-sidebar
       id="add-address-sidebar"
       shadow
@@ -42,12 +50,13 @@
     >
       <add-adress-form />
     </b-sidebar>
-  </fragment>
+  </b-card>
+
 </template>
 
 <script>
 import {
-   BCard, BListGroup, BListGroupItem, BSidebar, VBToggle,
+  BCard, BListGroup, BListGroupItem, BSidebar, VBToggle, BButton,
 } from 'bootstrap-vue'
 import AddAdressForm from '@/views/forms/form-addAddress/AddAdressForm.vue'
 import Ripple from 'vue-ripple-directive'
@@ -56,7 +65,6 @@ import { tableColumns, selectOptions } from '@/views/wallet/wallet-table/utils'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import OurTable from '@core/components/table/OurTable.vue'
 import ColumnSelecter from '@core/components/column-selecter/ColumnSelecter.vue'
-import store from '@/store/index'
 
 export default {
   components: {
@@ -67,6 +75,7 @@ export default {
     AddAdressForm,
     OurTable,
     ColumnSelecter,
+    BButton,
   },
   directives: {
     Ripple,
@@ -77,26 +86,10 @@ export default {
       allMyAddresses: [],
       selectedItem: tableColumns,
       options: tableColumns.concat(selectOptions),
-      pageLength: 10,
-      dir: false,
       columns: tableColumns,
-      rows: [],
       totalRows: 0,
-      searchTerm: '',
       apolloLoading: 0,
     }
-  },
-  computed: {
-    direction() {
-      if (store.state.appConfig.isRTL) {
-        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-        this.dir = true
-        return this.dir
-      }
-      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-      this.dir = false
-      return this.dir
-    },
   },
   watch: {
     selectedItem(val, oldVal) {
@@ -114,7 +107,6 @@ export default {
       query: GET_ALL_ADDRESSES,
       update: data => data.allMyAddresses.results,
       result({ data, loading }) {
-        console.log('data', data)
         if (!loading) {
           this.totalRows = data.allMyAddresses.totalCount
         }
@@ -166,7 +158,6 @@ export default {
 </script>
 
 <style lang="scss" >
-  @import '@core/scss/vue/libs/vue-good-table.scss';
   .b-sidebar {
     width: 400px !important;
   }
@@ -176,10 +167,13 @@ export default {
   .wallets-group .list-group-item:hover {
     background-color: white !important;
   }
-  .wallets-group table {
-    border: 0px !important;
-  }
   .wallets-group .vgt-global-search {
     border: 0px !important;
+  }
+  .select-column-section {
+    width: 70% !important;
+  }
+  .button-section {
+   height: 50%;
   }
 </style>

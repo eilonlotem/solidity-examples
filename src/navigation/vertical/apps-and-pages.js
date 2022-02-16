@@ -8,9 +8,9 @@ export default [
     icon: 'GridIcon',
   },
   {
-    title: 'Email',
-    route: 'apps-email',
-    icon: 'MailIcon',
+    title: 'Transactions Table',
+    route: 'transactions-table',
+    icon: 'TrendingUpIcon',
   },
   {
     title: 'Chat',

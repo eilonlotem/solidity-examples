@@ -145,9 +145,9 @@ export default {
   methods: {
     logout() {
       // Remove userData from localStorage
-      this.$auth.logout()
       localStorage.removeItem('userData')
       localStorage.removeItem('access_token')
+      this.$auth.logout()
       // Redirect to login page
       this.$router.push('/')
     },

@@ -4,6 +4,10 @@ import VueRouter from 'vue-router'
 // Routes
 import { canNavigate } from '@/libs/acl/routeProtection'
 import { isUserLoggedIn, getUserData, getHomeRouteForLoggedInUser } from '@/auth/utils'
+import { authGuard } from '@/auth/authGuard'
+import store from '@/store'
+import { getInstance } from '@/auth'
+import TransactionsTable from '@/views/transactions/transaction-table/TransactionsTable.vue'
 import apps from './routes/apps'
 import dashboard from './routes/dashboard'
 import uiElements from './routes/ui-elements/index'
@@ -11,9 +15,6 @@ import pages from './routes/pages'
 import chartsMaps from './routes/charts-maps'
 import formsTable from './routes/forms-tables'
 import others from './routes/others'
-import { authGuard } from '@/auth/authGuard'
-import store from '@/store'
-import { getInstance } from '@/auth'
 
 Vue.use(VueRouter)
 
@@ -29,6 +30,12 @@ const router = new VueRouter({
       path: '/wallets-table',
       name: 'wallets-table',
       component: () => import('@/views/wallet/wallet-table/WalletsTable.vue'),
+      beforeEnter: authGuard,
+    },
+    {
+      path: '/transactions-table',
+      name: 'transactions-table',
+      component: TransactionsTable,
       beforeEnter: authGuard,
     },
     ...apps,

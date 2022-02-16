@@ -14,16 +14,6 @@
       perPage:pageLength
     }"
   >
-    <div slot="table-actions">
-      <b-button
-        v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-        v-b-toggle.add-address-sidebar
-        block
-        variant="primary"
-      >
-        {{ addButtonText }}
-      </b-button>
-    </div>
     <template
       slot="table-row"
       slot-scope="props"
@@ -111,7 +101,7 @@
 import store from '@/store'
 import { VueGoodTable } from 'vue-good-table'
 import {
-  BDropdown, BDropdownItem, BButton, VBToggle, BPagination, BFormSelect,
+  BDropdown, BDropdownItem, VBToggle, BPagination, BFormSelect,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 
@@ -120,7 +110,6 @@ export default {
     VueGoodTable,
     BDropdown,
     BDropdownItem,
-    BButton,
     BPagination,
     BFormSelect,
   },
@@ -139,10 +128,6 @@ export default {
     },
     data: {
       type: Array,
-      required: true,
-    },
-    addButtonText: {
-      type: String,
       required: true,
     },
     deleteCallBack: {
@@ -179,6 +164,9 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="scss" >
+  @import '@core/scss/vue/libs/vue-good-table.scss';
+  .vgt-table{
+    border: 0px !important;
+  }
 </style>
