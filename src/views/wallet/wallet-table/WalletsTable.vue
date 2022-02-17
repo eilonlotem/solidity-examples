@@ -165,7 +165,7 @@ export default {
     border: 0px !important;
   }
   .wallets-group .list-group-item:hover {
-    background-color: white !important;
+    background-color:transparent !important;
   }
   .wallets-group .vgt-global-search {
     border: 0px !important;
