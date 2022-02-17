@@ -1,5 +1,33 @@
 <template>
   <div>
+    <!-- <b-modal
+      id="modal"
+      v-model="showModal"
+      size="lg"
+      title="Import"
+    >
+      <b-row class="pb-1">
+        <b-form-input
+          id="search-input"
+          placeholder="Search"
+        />
+      </b-row>
+      <b-row class="d-flex justify-content-center">
+        <b-tabs class="import-tabs">
+          <b-tab title="All">
+            All
+          </b-tab>
+          <b-tab title="Exchange">
+            Exchange
+          </b-tab>
+          <b-tab
+            title="Chain "
+          >
+            Chain
+          </b-tab>
+        </b-tabs>
+      </b-row>
+    </b-modal> -->
     <form-wizard
       color="#7367F0"
       :title="null"
@@ -8,57 +36,98 @@
       back-button-text="Previous"
       class="steps-transparent mb-3"
       @on-complete="formSubmitted"
-    >      <tab-content
-      v-for="(tab, index) in wizardTabsList"
-      :key="index"
-      :title="tab.title"
-      :icon="tab.icon"
     >
-      <b-row>
-        <b-col
-          cols="12"
-          class="mb-2"
-        >
-          <h5 class="mb-0">
-            {{ tab.title }}
-          </h5>
-          <small class="text-muted">
-            {{ tab.title }}
-          </small>
-        </b-col>
-
-        <b-col
-          v-for="(input, indexForm) in tab.form"
-          :key="indexForm"
-          md="6"
-        >
-          <b-form-group
-            :label="input.label"
-            :label-for="input.labelFor"
+      <tab-content
+        title="Import"
+        icon="feather icon-arrow-down-circle"
+      >
+        <b-row class="pb-1">
+          <b-form-input
+            id="search-input"
+            placeholder="Search"
+          />
+        </b-row>
+        <b-row class="d-flex justify-content-center">
+          <b-tabs class="import-tabs">
+            <b-tab title="All">
+              <b-row>
+                <b-col
+                  v-for="(item, index) in itemsToImport"
+                  :key="index"
+                  cols="3"
+                >
+                  <b-card no-body>
+                    <b-card-body>
+                      <b-img
+                        fluid
+                        :src="require('@/assets/images/slider/03.jpg')"
+                      />
+                    </b-card-body>
+                  </b-card>
+                </b-col>
+              </b-row>
+            </b-tab>
+            <b-tab title="Exchange">
+              Exchange
+            </b-tab>
+            <b-tab
+              title="Chain "
+            >
+              Chain
+            </b-tab>
+          </b-tabs>
+        </b-row>
+      </tab-content>
+      <tab-content
+        v-for="(tab, index) in wizardTabsList"
+        :key="index"
+        :title="tab.title"
+        :icon="tab.icon"
+      >
+        <b-row>
+          <b-col
+            cols="12"
+            class="mb-2"
           >
+            <h5 class="mb-0">
+              {{ tab.title }}
+            </h5>
+            <small class="text-muted">
+              {{ tab.title }}
+            </small>
+          </b-col>
+          <b-col
+            v-for="(input, indexForm) in tab.form"
+            :key="indexForm"
+            md="6"
+          >
+            <b-form-group
+              :label="input.label"
+              :label-for="input.labelFor"
+            >
 
-            <template v-if="input.type == 'input'">
-              <b-form-input
-                :id="input.labelFor"
-                placeholder=""
-              />
-            </template>
+              <template v-if="input.type == 'input'">
+                <b-form-input
+                  :id="input.labelFor"
+                  placeholder=""
+                />
+              </template>
 
-            <template v-if="input.type == 'select'">
-              <v-select
-                :id="input.labelFor"
-                v-model="selectState[input.model]"
-                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                :options="selectState[input.options]"
-                :selectable="option => ! option.value.includes('select_value')"
-                label="text"
-              />
-            </template>
+              <template v-if="input.type == 'select'">
+                <v-select
+                  :id="input.labelFor"
+                  v-model="selectState[input.model]"
+                  :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+                  :options="selectState[input.options]"
+                  :selectable="option => ! option.value.includes('select_value')"
+                  label="text"
+                />
+              </template>
 
-          </b-form-group>
-        </b-col>
-      </b-row>
-    </tab-content>
+            </b-form-group>
+          </b-col>
+        </b-row>
+      </tab-content>
     </form-wizard>
   </div>
 </template>
@@ -73,6 +142,13 @@ import {
   BCol,
   BFormGroup,
   BFormInput,
+  BModal,
+  BTabs,
+  BTab,
+  BCard,
+  BCardText,
+  BCardBody,
+  BImg,
 } from 'bootstrap-vue'
 import tabsList from './utils'
 
@@ -87,9 +163,17 @@ export default {
     vSelect,
     // eslint-disable-next-line vue/no-unused-components
     ToastificationContent,
+    BModal,
+    BTabs,
+    BTab,
+    BCard,
+    BCardText,
+    BCardBody,
+    BImg,
   },
   data() {
     return {
+      showModal: true,
       selectedContry: 'select_value',
       selectedLanguage: 'nothing_selected',
       wizardTabsList: tabsList,
@@ -115,6 +199,24 @@ export default {
           { value: 'Russian', text: 'Russian' },
         ],
       },
+      itemsToImport: [
+        {
+          name: 'Item1',
+          image: '@/assets/images/slider/03.jpg',
+        },
+        {
+          name: 'Item2',
+          image: '@/assets/images/slider/02.jpg',
+        },
+        {
+          name: 'Item3',
+          image: '@/assets/images/slider/03.jpg',
+        },
+        {
+          name: 'Item4',
+          image: '@/assets/images/slider/02.jpg',
+        },
+      ],
     }
   },
   methods: {
@@ -135,4 +237,13 @@ export default {
 <style lang="scss">
   @import '@core/scss/vue/libs/vue-wizard.scss';
   @import '@core/scss/vue/libs/vue-select.scss';
+  .import-tabs {
+    width: 80% !important;
+    .nav-item {
+      width: 33% !important;
+    }
+  }
+  #search-input {
+    border: 0px !important;
+  }
 </style>

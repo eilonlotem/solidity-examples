@@ -19,10 +19,10 @@
           <div class="button-section d-flex align-item-end">
             <b-button
               v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+              v-b-modal.import-modal
               style="{height: '50%'}"
               block
               variant="primary"
-              @click="()=>{this.$router.push('/wallets/add-wallet')}"
             >
               Add Address
             </b-button>
@@ -40,23 +40,21 @@
         />
       </b-list-group-item>
     </b-list-group>
-    <b-sidebar
-      id="add-address-sidebar"
-      shadow
-      right
-      backdrop
-      bg-variant="white"
-      no-header
+    <b-modal
+      id="import-modal"
+      size="lg"
+      title="Import"
+      ok-only
     >
-      <add-adress-form />
-    </b-sidebar>
+      <add-wallet-form />
+    </b-modal>
   </b-card>
 
 </template>
 
 <script>
 import {
-  BCard, BListGroup, BListGroupItem, BSidebar, VBToggle, BButton,
+  BCard, BListGroup, BListGroupItem, BSidebar, VBToggle, BButton, BModal,
 } from 'bootstrap-vue'
 import AddAdressForm from '@/views/forms/form-addAddress/AddAdressForm.vue'
 import Ripple from 'vue-ripple-directive'
@@ -65,6 +63,7 @@ import { tableColumns, selectOptions } from '@/views/wallet/wallet-table/utils'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import OurTable from '@core/components/table/OurTable.vue'
 import ColumnSelecter from '@core/components/column-selecter/ColumnSelecter.vue'
+import AddWalletForm from '@/views/wallet/add-wallet/AddWalletForm.vue'
 
 export default {
   components: {
@@ -72,10 +71,11 @@ export default {
     BListGroup,
     BListGroupItem,
     BSidebar,
-    AddAdressForm,
+    AddWalletForm,
     OurTable,
     ColumnSelecter,
     BButton,
+    BModal,
   },
   directives: {
     Ripple,
