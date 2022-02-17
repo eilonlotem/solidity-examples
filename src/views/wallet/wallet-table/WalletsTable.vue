@@ -19,10 +19,10 @@
           <div class="button-section d-flex align-item-end">
             <b-button
               v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-              v-b-toggle.add-address-sidebar
               style="{height: '50%'}"
               block
               variant="primary"
+              @click="()=>{this.$router.push('/wallets/add-wallet')}"
             >
               Add Address
             </b-button>

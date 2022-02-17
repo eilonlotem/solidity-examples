@@ -4,8 +4,19 @@ export default [
   },
   {
     title: 'Wallet Table',
-    route: 'wallets-table',
     icon: 'GridIcon',
+    children: [
+      {
+        icon: 'ListIcon',
+        title: 'Address List',
+        route: 'wallets-table',
+      },
+      {
+        icon: 'PlusCircleIcon',
+        title: 'Add Address',
+        route: 'wallets-add-wallet',
+      },
+    ],
   },
   {
     title: 'Transactions Table',

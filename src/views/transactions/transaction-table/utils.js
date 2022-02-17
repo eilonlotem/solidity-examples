@@ -30,23 +30,4 @@ export const tableColumns = [
       enabled: true,
       placeholder: 'Search Enrichment',
     },
-  },
-  {
-    label: 'Action',
-    field: 'action',
   }]
-
-export const selectOptions = [
-  {
-    label: 'Total Transactions',
-    field: 'totalTransactions',
-  },
-  {
-    label: 'Type',
-    field: 'type',
-  },
-  {
-    label: 'Internal',
-    field: 'internal',
-  },
-]

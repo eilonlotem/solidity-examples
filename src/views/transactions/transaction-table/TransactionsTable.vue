@@ -16,17 +16,6 @@
               @changeSelectedItems="changeSelectedItems($event)"
             />
           </div>
-          <div class="button-section d-flex align-item-end">
-            <b-button
-              v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-              v-b-toggle.add-address-sidebar
-              style="{height: '50%'}"
-              block
-              variant="primary"
-            >
-              Add Transaction
-            </b-button>
-          </div>
         </div>
       </b-list-group-item>
       <b-list-group-item>
@@ -34,7 +23,6 @@
           :columns="columns"
           :data="allTransactions"
           :is-loading="apolloLoading ? true: false"
-          :add-button-text="'Add Address'"
           :total-rows="totalRows"
           :next-page="nextPage"
           :delete-call-back="()=>{}"
@@ -45,7 +33,7 @@
 </template>
 <script>
 import {
-  BCard, BListGroup, BListGroupItem, BButton, VBToggle,
+  BCard, BListGroup, BListGroupItem, VBToggle,
 } from 'bootstrap-vue'
 import OurTable from '@core/components/table/OurTable.vue'
 import ColumnSelecter from '@core/components/column-selecter/ColumnSelecter.vue'
@@ -59,7 +47,6 @@ export default {
     OurTable,
     BListGroup,
     BListGroupItem,
-    BButton,
     ColumnSelecter,
   },
   directives: {
@@ -93,12 +80,6 @@ export default {
   },
   watch: {
     selectedItem(val, oldVal) {
-      const actionItem = val.find(item => item.field === 'action')
-      if (actionItem) {
-        const columnWithOutAction = val.filter(item => item.field !== 'action')
-        this.columns = [...columnWithOutAction].concat(actionItem)
-        return
-      }
       this.columns = [...val]
     },
   },
@@ -125,8 +106,8 @@ export default {
 </script>
 
 <style>
-select-column-section {
-    width: 70% !important;
+.select-column-section {
+    width: 50% !important;
   }
 
   .list-group-item{
