@@ -2,7 +2,7 @@ import gql from 'graphql-tag'
 
 export const GET_ALL_ADDRESSES = gql`
 query MyQuery($limit: Int, $offset: Int) {
-  allMyAddresses(internalOnly: false, limit: $limit, offset: $offset) {
+  account(internal: false, limit: $limit, offset: $offset) {
     totalCount
     results {
       address
@@ -20,7 +20,7 @@ query MyQuery($limit: Int, $offset: Int) {
 
 export const DELETE_ADDRESS = id => (gql`mutation MyMutation {
   __typename
-  deleteAddress(id: ${id}) {
+  deleteAccount(id: ${id}) {
     address
   }
 }`)

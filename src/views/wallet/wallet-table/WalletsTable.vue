@@ -32,7 +32,7 @@
       <b-list-group-item>
         <our-table
           :columns="columns"
-          :data="allMyAddresses"
+          :data="allAccounts"
           :is-loading="apolloLoading ? true: false"
           :delete-call-back="deleteAddress"
           :total-rows="totalRows"
@@ -83,7 +83,7 @@ export default {
   },
   data() {
     return {
-      allMyAddresses: [],
+      allAccounts: [],
       selectedItem: tableColumns,
       options: tableColumns.concat(selectOptions),
       columns: tableColumns,
@@ -103,12 +103,12 @@ export default {
     },
   },
   apollo: {
-    allMyAddresses: {
+    allAccounts: {
       query: GET_ALL_ADDRESSES,
-      update: data => data.allMyAddresses.results,
+      update: data => data.account.results,
       result({ data, loading }) {
         if (!loading) {
-          this.totalRows = data.allMyAddresses.totalCount
+          this.totalRows = data.account.totalCount
         }
       },
       variables: {
@@ -124,13 +124,13 @@ export default {
     nextPage(value) {
       // this.offset = this.limit
       const offset = (value.currentPage - 1) * 10
-      this.$apollo.queries.allMyAddresses.fetchMore({
+      this.$apollo.queries.allAccounts.fetchMore({
         variables: {
           limit: 10,
           offset,
         },
         updateQuery(previousResult, { fetchMoreResult }) {
-        // this.totalRows = fetchMoreResult.allMyAddresses.totalCount
+        // this.totalRows = fetchMoreResult.allAccounts.totalCount
           return fetchMoreResult
         },
       })
@@ -148,7 +148,7 @@ export default {
             text: 'You have successfully delete the address',
           },
         })
-        this.$apollo.queries.allMyAddresses.refetch()
+        this.$apollo.queries.allAccounts.refetch()
       } catch (error) {
         console.log(error)
       }

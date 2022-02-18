@@ -66,10 +66,10 @@ export default {
   apollo: {
     allTransactions: {
       query: GET_ALL_TRANSACTIONS,
-      update: data => data.allMyTxs.results,
+      update: data => data.parsedTx.results,
       result({ data, loading }) {
         if (!loading) {
-          this.totalRows = data.allMyTxs.totalCount
+          this.totalRows = data.parsedTx.totalCount
         }
       },
       variables: {
@@ -88,7 +88,6 @@ export default {
       this.selectedItem = items
     },
     nextPage(value) {
-      // this.offset = this.limit
       const offset = (value.currentPage - 1) * 10
       this.$apollo.queries.allTransactions.fetchMore({
         variables: {
@@ -96,7 +95,6 @@ export default {
           offset,
         },
         updateQuery(previousResult, { fetchMoreResult }) {
-          this.totalRows = fetchMoreResult.allMyTxs.totalCount
           return fetchMoreResult
         },
       })

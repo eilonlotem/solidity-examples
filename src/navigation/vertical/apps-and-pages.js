@@ -5,18 +5,7 @@ export default [
   {
     title: 'Wallet Table',
     icon: 'GridIcon',
-    children: [
-      {
-        icon: 'ListIcon',
-        title: 'Address List',
-        route: 'wallets-table',
-      },
-      {
-        icon: 'PlusCircleIcon',
-        title: 'Add Address',
-        route: 'wallets-add-wallet',
-      },
-    ],
+    route: 'wallets-table',
   },
   {
     title: 'Transactions Table',
