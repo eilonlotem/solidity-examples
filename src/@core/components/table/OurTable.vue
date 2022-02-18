@@ -44,7 +44,33 @@
         </span>
       </span>
 
-      <span v-else>
+      <!-- Column: Networks -->
+      <span v-else-if="props.column.field === 'networks'">
+        <networks-avatars :networks="props.row.networks" />
+      </span>
+
+      <!-- Column: Tx 24 -->
+      <span v-else-if="['24h', '7d', '30d', 'total'].includes(props.column.field)">
+        <transactions-amount
+          :incoming="props.row.totalTransactions.incoming_transactions[props.column.field]"
+          :outgoing="props.row.totalTransactions.outgoing_transactions[props.column.field]"
+        />
+      </span>
+
+      <!-- Column: Account / Contact (Address) Details -->
+      <span v-else-if="props.column.field === 'address_details'">
+        <p class="mb-0 font-weight-bolder">
+          {{ props.row.name }}
+        </p>
+        <p class="text-muted">{{ props.row.description }}</p>
+      </span>
+
+      <!-- Column: Address Scanner Link -->
+      <span v-else-if="props.column.field === 'address_scanner_link'">
+        <scanner-link :networks="props.row.networks" type="address" :address="props.row.address" />
+      </span>
+
+      <span class="text-capitalize" v-else>
         {{ props.formattedRow[props.column.field] }}
       </span>
     </template>
@@ -100,6 +126,9 @@
 <script>
 import store from '@/store'
 import { VueGoodTable } from 'vue-good-table'
+import NetworksAvatars from '@/views/components/networks/NetworksAvatars.vue'
+import TransactionsAmount from '@/views/components/transactions/TransactionsAmount.vue'
+import ScannerLink from '@/views/components/scanner/ScannerLink.vue'
 import {
   BDropdown, BDropdownItem, VBToggle, BPagination, BFormSelect,
 } from 'bootstrap-vue'
@@ -112,6 +141,9 @@ export default {
     BDropdownItem,
     BPagination,
     BFormSelect,
+    NetworksAvatars,
+    TransactionsAmount,
+    ScannerLink
   },
   directives: {
     Ripple,
@@ -168,5 +200,6 @@ export default {
   @import '@core/scss/vue/libs/vue-good-table.scss';
   .vgt-table{
     border: 0px !important;
+    font-size: 1rem !important;
   }
 </style>

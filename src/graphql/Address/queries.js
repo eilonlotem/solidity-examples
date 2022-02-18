@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
 
 export const GET_ALL_ADDRESSES = gql`
-query MyQuery($limit: Int, $offset: Int) {
-  account(internal: false, limit: $limit, offset: $offset) {
+query MyQuery($limit: Int, $offset: Int, $internal: Boolean) {
+  account(internal: $internal, limit: $limit, offset: $offset) {
     totalCount
     results {
       address

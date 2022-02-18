@@ -1,5 +1,5 @@
 <template>
-  <b-card title="Wallets Table">
+  <b-card title="Accounts">
     <b-list-group class="wallets-group">
       <b-list-group-item>
         <div
@@ -114,6 +114,8 @@ export default {
       variables: {
         limit: 10,
         offset: 0,
+        internal: true
+
       },
     },
   },

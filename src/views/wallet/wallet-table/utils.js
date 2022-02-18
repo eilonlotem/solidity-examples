@@ -1,45 +1,51 @@
 export const tableColumns = [
   {
-    label: 'Name',
-    field: 'name',
-    filterOptions: {
-      enabled: true,
-      placeholder: 'Search Name',
-    },
+    label: 'Details',
+    field: 'address_details',
   },
   {
     label: 'Address',
     field: 'address',
-    filterOptions: {
-      enabled: true,
-      placeholder: 'Search Adress',
-    },
   },
   {
     label: 'Blockchain',
     field: 'blockchain',
-    filterOptions: {
-      enabled: true,
-      placeholder: 'Search Blockchain',
-    },
   },
   {
-    label: 'Description',
-    field: 'description',
-    filterOptions: {
-      enabled: true,
-      placeholder: 'Search Description',
-    },
+    label: 'Networks',
+    field: 'networks',
   },
   {
-    label: 'Action',
+    label: 'Tx 24h',
+    field: '24h',
+  },
+  {
+    label: 'Tags',
+    field: 'tags',
+  },
+  {
+    label: 'Scanner',
+    field: 'address_scanner_link',
+  },
+  {
     field: 'action',
-  }]
+    label: 'Action',
+  },
+
+]
 
 export const selectOptions = [
   {
-    label: 'Total Transactions',
-    field: 'totalTransactions',
+    label: 'Tx 7d',
+    field: '7d',
+  },
+  {
+    label: 'Tx 30d',
+    field: '30d',
+  },
+  {
+    label: 'Tx Total',
+    field: 'total',
   },
   {
     label: 'Type',
