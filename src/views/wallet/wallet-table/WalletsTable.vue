@@ -44,7 +44,7 @@
       id="import-modal"
       size="lg"
       title="Import"
-      ok-only
+      hide-footer
     >
       <add-wallet-form />
     </b-modal>
