@@ -16,15 +16,25 @@
               @changeSelectedItems="changeSelectedItems($event)"
             />
           </div>
-          <div class="button-section d-flex align-item-end">
+          <div class="button-section d-flex align-item-end justify-content-around">
             <b-button
               v-ripple.400="'rgba(255, 255, 255, 0.15)'"
               v-b-modal.import-modal
               style="{height: '50%'}"
-              block
               variant="primary"
+              width="30"
             >
               Add Address
+            </b-button>
+            <b-button
+              v-b-toggle.filter-input-sidebar
+              variant="primary"
+            >
+              <feather-icon
+                icon="FilterIcon"
+                class="mr-50"
+              />
+              <span class="align-middle">Filter</span>
             </b-button>
           </div>
         </div>
@@ -48,15 +58,17 @@
     >
       <add-wallet-form />
     </b-modal>
+
+    <filter-inputs-sidebar />
+
   </b-card>
 
 </template>
 
 <script>
 import {
-  BCard, BListGroup, BListGroupItem, BSidebar, VBToggle, BButton, BModal,
+  BCard, BListGroup, BListGroupItem, VBToggle, BButton, BModal,
 } from 'bootstrap-vue'
-import AddAdressForm from '@/views/forms/form-addAddress/AddAdressForm.vue'
 import Ripple from 'vue-ripple-directive'
 import { GET_ALL_ADDRESSES, DELETE_ADDRESS } from '@/graphql/Address/queries'
 import { tableColumns, selectOptions } from '@/views/wallet/wallet-table/utils'
@@ -64,18 +76,20 @@ import ToastificationContent from '@core/components/toastification/Toastificatio
 import OurTable from '@core/components/table/OurTable.vue'
 import ColumnSelecter from '@core/components/column-selecter/ColumnSelecter.vue'
 import AddWalletForm from '@/views/wallet/add-wallet/AddWalletForm.vue'
+import FilterInputsSidebar from '@/views/components/filter-inputs-sidebar/FilterInputsSidebar.vue'
 
 export default {
   components: {
     BCard,
     BListGroup,
     BListGroupItem,
-    BSidebar,
     AddWalletForm,
     OurTable,
     ColumnSelecter,
     BButton,
     BModal,
+    FilterInputsSidebar,
+
   },
   directives: {
     Ripple,
@@ -83,6 +97,7 @@ export default {
   },
   data() {
     return {
+      isEventHandlerSidebarActive: false,
       allAccounts: [],
       selectedItem: tableColumns,
       options: tableColumns.concat(selectOptions),
@@ -177,5 +192,6 @@ export default {
   }
   .button-section {
    height: 50%;
+   width: 30%;
   }
 </style>

@@ -16,6 +16,18 @@
               @changeSelectedItems="changeSelectedItems($event)"
             />
           </div>
+          <div class="button-section d-flex align-item-end justify-content-around">
+            <b-button
+              v-b-toggle.filter-input-sidebar
+              variant="primary"
+            >
+              <feather-icon
+                icon="FilterIcon"
+                class="mr-50"
+              />
+              <span class="align-middle">Filter</span>
+            </b-button>
+          </div>
         </div>
       </b-list-group-item>
       <b-list-group-item>
@@ -29,17 +41,20 @@
         />
       </b-list-group-item>
     </b-list-group>
+    <filter-inputs-sidebar />
+
   </b-card>
 </template>
 <script>
 import {
-  BCard, BListGroup, BListGroupItem, VBToggle,
+  BCard, BListGroup, BListGroupItem, VBToggle, BButton,
 } from 'bootstrap-vue'
 import OurTable from '@core/components/table/OurTable.vue'
 import ColumnSelecter from '@core/components/column-selecter/ColumnSelecter.vue'
 import { GET_ALL_TRANSACTIONS } from '@/graphql/Transaction'
 import { tableColumns } from '@/views/transactions/transaction-table/utils'
 import Ripple from 'vue-ripple-directive'
+import FilterInputsSidebar from '@/views/components/filter-inputs-sidebar/FilterInputsSidebar.vue'
 
 export default {
   components: {
@@ -48,6 +63,8 @@ export default {
     BListGroup,
     BListGroupItem,
     ColumnSelecter,
+    BButton,
+    FilterInputsSidebar,
   },
   directives: {
     'b-toggle': VBToggle,
