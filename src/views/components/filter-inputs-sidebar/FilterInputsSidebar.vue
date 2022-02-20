@@ -35,15 +35,15 @@
           @reset.prevent="resetForm"
         >
           <b-form-group
-            label="Wallets"
-            label-for="wallets"
+            label="Accounts"
+            label-for="accounts"
           >
             <v-select
-              :options="form.wallets"
+              :options="form.accounts"
               :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
               label="label"
               :reduce="calendar => calendar.label"
-              input-id="wallets"
+              input-id="accounts"
             />
           </b-form-group>
           <b-form-group>
@@ -245,7 +245,7 @@ export default {
     return {
       showFullDate: false,
       form: {
-        wallets: [],
+        accounts: [],
         contacts: [],
         addresses: [],
         labels: [],
@@ -264,7 +264,7 @@ export default {
     },
     resetForm() {
       this.form = {
-        wallets: [],
+        accounts: [],
         contacts: [],
         addresses: [],
         labels: [],

@@ -4,7 +4,8 @@ import VueRouter from 'vue-router'
 // Routes
 import TransactionsTable from '@/views/transactions/transaction-table/TransactionsTable.vue'
 import { authGuard } from '@/auth/authGuard'
-import wallets from './routes/wallets'
+import addresses from './routes/addresses'
+import contracts from './routes/contracts'
 
 Vue.use(VueRouter)
 
@@ -15,13 +16,27 @@ const router = new VueRouter({
     return { x: 0, y: 0 }
   },
   routes: [
-    { path: '/', redirect: { name: 'wallets-table' } },
-    ...wallets,
+    { path: '/', redirect: { name: 'accounts-table' } },
+    ...addresses,
+    ...contracts,
     {
       path: '/transactions-table',
       name: 'transactions-table',
       component: TransactionsTable,
       beforeEnter: authGuard,
+      meta: {
+        pageTitle: 'Transactions',
+        breadcrumb: [
+          {
+            text: 'Home',
+            to: '/'
+          },
+          {
+            text: 'Transactions',
+            active: true,
+          },
+        ],
+      },
     },
     {
       path: '*',

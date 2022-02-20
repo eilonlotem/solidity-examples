@@ -33,7 +33,7 @@ export default function usAppConfig() {
   })
 
   const skinClasses = computed(() => {
-    if (skin.value === 'bordered') return 'bordered-layout'
+    if (skin.value === 'light') return 'bordered-layout'
     if (skin.value === 'semi-dark') return 'semi-dark-layout'
 
     // Do not return any class for dark layout because dark layout updates class in body

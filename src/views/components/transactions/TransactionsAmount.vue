@@ -31,12 +31,6 @@ export default {
     'b-tooltip': VBTooltip,
   },
   props: {
-    networks: {
-      type: Array,
-      default: () => new Array()
-    }
-  },
-  props: {
     incoming: {
       type: Number,
       default: -1

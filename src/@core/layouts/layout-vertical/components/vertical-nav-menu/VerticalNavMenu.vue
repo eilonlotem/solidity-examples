@@ -25,34 +25,34 @@
               to="/"
             >
               <span class="brand-logo">
-                <b-img
+                <!-- <b-img
                   :src="appLogoImage"
                   alt="logo"
-                />
+                /> -->
               </span>
-              <h2 class="brand-text">
+              <h1 class="brand-text text-success">
                 {{ appName }}
-              </h2>
+              </h1>
             </b-link>
           </li>
 
           <!-- Toggler Button -->
-          <li class="nav-item nav-toggle">
+          <!-- <li class="nav-item nav-toggle">
             <b-link class="nav-link modern-nav-toggle">
               <feather-icon
                 icon="XIcon"
                 size="20"
-                class="d-block d-xl-none"
+                class="d-block d-xl-none text-success"
                 @click="toggleVerticalMenuActive"
               />
               <feather-icon
                 :icon="collapseTogglerIconFeather"
                 size="20"
-                class="d-none d-xl-block collapse-toggle-icon"
+                class="d-none d-xl-block collapse-toggle-icon text-success"
                 @click="toggleCollapsed"
               />
             </b-link>
-          </li>
+          </li> -->
         </ul>
       </slot>
     </div>

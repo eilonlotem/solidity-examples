@@ -49,6 +49,11 @@
         <networks-avatars :networks="props.row.networks" />
       </span>
 
+      <!-- Column: Networks -->
+      <span v-else-if="props.column.field === 'network'">
+        <networks-avatars :networks="[props.row.network]" />
+      </span>
+
       <!-- Column: Tx 24 -->
       <span v-else-if="['24h', '7d', '30d', 'total'].includes(props.column.field)">
         <transactions-amount
@@ -59,15 +64,89 @@
 
       <!-- Column: Account / Contact (Address) Details -->
       <span v-else-if="props.column.field === 'address_details'">
-        <p class="mb-0 font-weight-bolder">
-          {{ props.row.name }}
-        </p>
-        <p class="text-muted">{{ props.row.description }}</p>
+        <address-item :address="props.row" /> 
+      </span>
+
+      <!-- Column: Meta -->
+      <span v-else-if="props.column.field === 'meta'">
+        <meta-item :contracts="props.row.contracts" />
+      </span>
+
+      <!-- Column: ABI -->
+      <span v-else-if="props.column.field === 'abi'">
+        <ABI-item :contracts="props.row.contracts" />
+      </span>
+
+      <!-- Column: Contract Meta -->
+      <span v-else-if="props.column.field === 'contract_meta'">
+        <meta-item :contracts="[props.row]" />
+      </span>
+
+      <!-- Column: Contract ABI -->
+      <span v-else-if="props.column.field === 'contract_abi'">
+        <ABI-item :contracts="[props.row]" />
+      </span>
+
+      <!-- Column: from address -->
+      <span v-else-if="props.column.field === 'from_address'">
+        <address-item :address="props.row.fromAddress" /> 
+      </span>
+
+      <!-- Column: to address -->
+      <span v-else-if="props.column.field === 'to_address'">
+        <address-item :address="props.row.toAddress" /> 
+      </span>
+
+      <!-- Column: function -->
+      <span v-else-if="props.column.field === 'function'">
+        <span
+          v-if="props.row.enrichment"
+        >
+          {{ props.row.enrichment.functionName }}
+        </span>
+      </span>
+
+      <!-- Column: value -->
+      <span v-else-if="props.column.field === 'value'">
+        <span
+        >
+          {{ props.row.value }}
+        </span>
       </span>
 
       <!-- Column: Address Scanner Link -->
       <span v-else-if="props.column.field === 'address_scanner_link'">
         <scanner-link :networks="props.row.networks" type="address" :address="props.row.address" />
+      </span>
+
+      <!-- Column: Transaction Scanner Link -->
+      <span v-else-if="props.column.field === 'transaction_scanner_link'">
+        <scanner-link :networks="[props.row.network]" type="tx" :address="props.row.hash" />
+      </span>
+
+      <!-- Column: Transaction hash -->
+      <span v-else-if="props.column.field === 'hash'">
+        <transaction-hash :hash="props.row.hash" />
+      </span>
+
+       <!-- Column: Raw -->
+      <span v-else-if="props.column.field === 'raw'">
+        <raw-item :item="props.row" />
+      </span>
+
+      <!-- Column: Contract -->
+      <span v-else-if="props.column.field === 'contract'">
+        <meta-item :contracts="[props.row.contract]" />
+      </span>
+
+      <!-- Column: Contract Scanner Link -->
+      <span v-else-if="props.column.field === 'contract_scanner_link'">
+        <scanner-link :networks="[props.row.network]" type="address" :address="props.row.address" />
+      </span>
+      
+      <!-- Column: Tags -->
+      <span v-else-if="props.column.field === 'tags'">
+        <tag-badges :tags="props.row.allTags" />
       </span>
 
       <span class="text-capitalize" v-else>
@@ -86,7 +165,7 @@
           </span>
           <b-form-select
             v-model="pageLength"
-            :options="['3','5','10']"
+            :options="['10','20','40', '100']"
             class="mx-1"
             @input="(value)=>props.perPageChanged({currentPerPage:value})"
           />
@@ -128,7 +207,13 @@ import store from '@/store'
 import { VueGoodTable } from 'vue-good-table'
 import NetworksAvatars from '@/views/components/networks/NetworksAvatars.vue'
 import TransactionsAmount from '@/views/components/transactions/TransactionsAmount.vue'
+import TransactionHash from '@/views/components/transactions/TransactionHash.vue'
 import ScannerLink from '@/views/components/scanner/ScannerLink.vue'
+import AddressItem from '@/views/components/address/AddressItem.vue'
+import ABIItem from '@/views/components/address/ABIItem.vue'
+import TagBadges from '@/views/components/tags/TagBadges.vue'
+import MetaItem from '@/views/components/address/MetaItem.vue'
+import RawItem from '@/views/components/raw/RawItem.vue'
 import {
   BDropdown, BDropdownItem, VBToggle, BPagination, BFormSelect,
 } from 'bootstrap-vue'
@@ -143,7 +228,13 @@ export default {
     BFormSelect,
     NetworksAvatars,
     TransactionsAmount,
-    ScannerLink
+    AddressItem,
+    ScannerLink,
+    ABIItem,
+    MetaItem,
+    TagBadges,
+    TransactionHash,
+    RawItem
   },
   directives: {
     Ripple,
@@ -201,5 +292,8 @@ export default {
   .vgt-table{
     border: 0px !important;
     font-size: 1rem !important;
+  }
+  .vgt-table td {
+    padding: 0.75em 0.0em 0.0em 0.75em !important;
   }
 </style>

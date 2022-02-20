@@ -1,0 +1,187 @@
+<template>
+  <b-card title="Contacts">
+    <b-list-group class="accounts-group">
+      <b-list-group-item>
+        <div
+          v-if="!apolloLoading ? true: false"
+          class="d-flex justify-content-between align-items-end"
+        >
+          <div class="select-column-section">
+            <h6 class="display-6">
+              Chose the columns you want to see
+            </h6>
+            <column-selecter
+              :options="options"
+              :selected-item="selectedItem"
+              @changeSelectedItems="changeSelectedItems($event)"
+            />
+          </div>
+          <div class="button-section d-flex">
+            <b-button
+              v-b-toggle.filter-input-sidebar
+              variant="primary"
+              class="mx-1"
+            >
+              <feather-icon
+                icon="FilterIcon"
+                class="mr-50"
+              />
+              <span class="align-middle">Filter</span>
+            </b-button>
+          </div>
+        </div>
+      </b-list-group-item>
+      <b-list-group-item>
+        <our-table
+          :columns="columns"
+          :data="allAccounts"
+          :is-loading="apolloLoading ? true: false"
+          :delete-call-back="deleteAddress"
+          :total-rows="totalRows"
+          :next-page="nextPage"
+        />
+      </b-list-group-item>
+    </b-list-group>
+    <b-modal
+      id="import-modal"
+      size="lg"
+      title="Import"
+      hide-footer
+    >
+      <add-account-form />
+    </b-modal>
+
+    <filter-inputs-sidebar />
+
+  </b-card>
+
+</template>
+
+<script>
+import {
+  BCard, BListGroup, BListGroupItem, VBToggle, BButton, BModal,
+} from 'bootstrap-vue'
+import Ripple from 'vue-ripple-directive'
+import { GET_ALL_ADDRESSES, DELETE_ADDRESS } from '@/graphql/Address/queries'
+import { tableColumns, selectOptions } from './utils'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import OurTable from '@core/components/table/OurTable.vue'
+import ColumnSelecter from '@core/components/column-selecter/ColumnSelecter.vue'
+import FilterInputsSidebar from '@/views/components/filter-inputs-sidebar/FilterInputsSidebar.vue'
+
+export default {
+  components: {
+    BCard,
+    BListGroup,
+    BListGroupItem,
+    OurTable,
+    ColumnSelecter,
+    BButton,
+    BModal,
+    FilterInputsSidebar,
+
+  },
+  directives: {
+    Ripple,
+    'b-toggle': VBToggle,
+  },
+  data() {
+    return {
+      isEventHandlerSidebarActive: false,
+      allAccounts: [],
+      selectedItem: tableColumns,
+      options: tableColumns.concat(selectOptions),
+      columns: tableColumns,
+      totalRows: 0,
+      apolloLoading: 0,
+    }
+  },
+  watch: {
+    selectedItem(val, oldVal) {
+      const actionItem = val.find(item => item.field === 'action')
+      if (actionItem) {
+        const columnWithOutAction = val.filter(item => item.field !== 'action')
+        this.columns = [...columnWithOutAction].concat(actionItem)
+        return
+      }
+      this.columns = [...val]
+    },
+  },
+  apollo: {
+    allAccounts: {
+      query: GET_ALL_ADDRESSES,
+      update: data => data.account.results,
+      result({ data, loading }) {
+        if (!loading) {
+          this.totalRows = data.account.totalCount
+        }
+      },
+      variables: {
+        limit: 10,
+        offset: 0,
+        internal: false
+
+      },
+    },
+  },
+  methods: {
+    changeSelectedItems(items) {
+      this.selectedItem = items
+    },
+    nextPage(value) {
+      // this.offset = this.limit
+      const offset = (value.currentPage - 1) * 10
+      this.$apollo.queries.allAccounts.fetchMore({
+        variables: {
+          limit: 10,
+          offset,
+        },
+        updateQuery(previousResult, { fetchMoreResult }) {
+        // this.totalRows = fetchMoreResult.allAccounts.totalCount
+          return fetchMoreResult
+        },
+      })
+    },
+    async deleteAddress(id) {
+      try {
+        await this.$apollo.mutate({ mutation: DELETE_ADDRESS(id) })
+        this.$toast({
+          component: ToastificationContent,
+          position: 'top-right',
+          props: {
+            title: 'Information',
+            icon: 'ThumbsUpIcon',
+            variant: 'success',
+            text: 'You have successfully delete the address',
+          },
+        })
+        this.$apollo.queries.allAccounts.refetch()
+      } catch (error) {
+        console.log(error)
+      }
+    },
+  },
+}
+</script>
+
+<style lang="scss" >
+  .b-sidebar {
+    width: 400px !important;
+  }
+  .accounts-group .list-group-item {
+    border: 0px !important;
+  }
+  .accounts-group .list-group-item:hover {
+    background-color:transparent !important;
+  }
+  .accounts-group .vgt-global-search {
+    border: 0px !important;
+  }
+  .select-column-section {
+    width: 70% !important;
+  }
+  .button-section {
+   height: 50%;
+   width: 30%;
+  }
+</style>

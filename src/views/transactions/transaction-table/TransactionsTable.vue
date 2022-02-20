@@ -1,5 +1,5 @@
 <template>
-  <b-card title="Transaction">
+  <b-card title="Transactions">
     <b-list-group>
       <b-list-group-item>
         <div
@@ -16,10 +16,11 @@
               @changeSelectedItems="changeSelectedItems($event)"
             />
           </div>
-          <div class="button-section d-flex align-item-end justify-content-around">
+          <div class="button-section d-flex ">
             <b-button
               v-b-toggle.filter-input-sidebar
               variant="primary"
+              class="mx-1"
             >
               <feather-icon
                 icon="FilterIcon"
@@ -52,7 +53,7 @@ import {
 import OurTable from '@core/components/table/OurTable.vue'
 import ColumnSelecter from '@core/components/column-selecter/ColumnSelecter.vue'
 import { GET_ALL_TRANSACTIONS } from '@/graphql/Transaction'
-import { tableColumns } from '@/views/transactions/transaction-table/utils'
+import { tableColumns, selectOptions } from '@/views/transactions/transaction-table/utils'
 import Ripple from 'vue-ripple-directive'
 import FilterInputsSidebar from '@/views/components/filter-inputs-sidebar/FilterInputsSidebar.vue'
 
@@ -77,7 +78,7 @@ export default {
       apolloLoading: 0,
       selectedItem: tableColumns,
       columns: tableColumns,
-      options: tableColumns,
+      options: tableColumns.concat(selectOptions),
     }
   },
   apollo: {

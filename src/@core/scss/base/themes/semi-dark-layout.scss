@@ -14,7 +14,15 @@
   /************ Main Menu **************/
 
   // main menu
+  .card,
+  .bs-stepper:not(.wizard-modern):not(.checkout-tab-steps),
+  .bs-stepper.wizard-modern .bs-stepper-content {
+    border: 1px solid $border-color;
+    box-shadow: none;
+  }
   .main-menu {
+    box-shadow: none;
+    border-right: 1px solid $border-color;
     background-color: $theme-dark-card-bg;
     .shadow-bottom {
       background: linear-gradient(

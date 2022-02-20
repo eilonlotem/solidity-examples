@@ -1,33 +1,58 @@
 export const tableColumns = [
   {
-    label: 'BlockHash',
-    field: 'blockHash',
-    filterOptions: {
-      enabled: true,
-      placeholder: 'Search BlockHash',
-    },
+    label: 'From',
+    field: 'from_address',
+  },
+  {
+    label: 'To',
+    field: 'to_address',
+  },
+  {
+    label: 'Network',
+    field: 'network',
+  },
+  {
+    label: 'TxHash',
+    field: 'hash',
+  },
+  {
+    label: 'Value',
+    field: 'value',
   },
   {
     label: 'BlockTime',
     field: 'blockTime',
-    filterOptions: {
-      enabled: true,
-      placeholder: 'Search BlockTime',
-    },
   },
   {
     label: 'Contract',
     field: 'contract',
-    filterOptions: {
-      enabled: true,
-      placeholder: 'Search Contract',
-    },
   },
   {
-    label: 'Enrichment',
-    field: 'enrichment',
-    filterOptions: {
-      enabled: true,
-      placeholder: 'Search Enrichment',
-    },
-  }]
+    label: 'Function',
+    field: 'function',
+  },
+  {
+    label: 'Scanner',
+    field: 'transaction_scanner_link',
+  },
+  {
+    label: 'Raw',
+    field: 'raw',
+  },
+]
+
+export const selectOptions = [
+  {
+    label: 'BlockHash',
+    field: 'blockHash',
+  },
+  {
+    label: 'Type',
+    field: 'type',
+  },
+  {
+    label: 'Internal',
+    field: 'internal',
+  },
+]
+  

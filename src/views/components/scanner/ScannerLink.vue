@@ -5,6 +5,7 @@
       <b-link
         :href="get_link(network).link"
         target="_blank"
+        class="text-dark"
       >
         {{ get_link(network).name }}
         <feather-icon
@@ -36,9 +37,10 @@ export default {
       } else if (network == "ethereum") {
         link = `https://etherscan.io/${this.type}/${this.address}`
         name = "etherscan"
-      }
-
-      return {
+      } else if (network == "polygon") {
+        link = `https://polygonscan.com/${this.type}/${this.address}`
+        name = "polygonscan"
+      } return {
         link,
         name
       }

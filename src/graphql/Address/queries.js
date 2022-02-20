@@ -14,6 +14,12 @@ query MyQuery($limit: Int, $offset: Int, $internal: Boolean) {
       type
       networks
       totalTransactions
+      contracts {
+        id
+        abi
+        meta
+        network
+      }
     }
   }
 }`

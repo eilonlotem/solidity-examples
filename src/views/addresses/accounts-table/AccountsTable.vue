@@ -1,6 +1,6 @@
 <template>
   <b-card title="Accounts">
-    <b-list-group class="wallets-group">
+    <b-list-group class="accounts-group">
       <b-list-group-item>
         <div
           v-if="!apolloLoading ? true: false"
@@ -16,13 +16,12 @@
               @changeSelectedItems="changeSelectedItems($event)"
             />
           </div>
-          <div class="button-section d-flex align-item-end justify-content-around">
+          <div class="button-section d-flex">
             <b-button
-              v-ripple.400="'rgba(255, 255, 255, 0.15)'"
               v-b-modal.import-modal
-              style="{height: '50%'}"
               variant="primary"
               width="30"
+              class="mx-1"
             >
               Add Address
             </b-button>
@@ -56,7 +55,7 @@
       title="Import"
       hide-footer
     >
-      <add-wallet-form />
+      <add-account-form />
     </b-modal>
 
     <filter-inputs-sidebar />
@@ -71,11 +70,11 @@ import {
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
 import { GET_ALL_ADDRESSES, DELETE_ADDRESS } from '@/graphql/Address/queries'
-import { tableColumns, selectOptions } from '@/views/wallet/wallet-table/utils'
+import { tableColumns, selectOptions } from './utils'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 import OurTable from '@core/components/table/OurTable.vue'
 import ColumnSelecter from '@core/components/column-selecter/ColumnSelecter.vue'
-import AddWalletForm from '@/views/wallet/add-wallet/AddWalletForm.vue'
+import AddAccountForm from '@/views/addresses/add-account/AddAccountForm.vue'
 import FilterInputsSidebar from '@/views/components/filter-inputs-sidebar/FilterInputsSidebar.vue'
 
 export default {
@@ -83,7 +82,7 @@ export default {
     BCard,
     BListGroup,
     BListGroupItem,
-    AddWalletForm,
+    AddAccountForm,
     OurTable,
     ColumnSelecter,
     BButton,
@@ -178,13 +177,13 @@ export default {
   .b-sidebar {
     width: 400px !important;
   }
-  .wallets-group .list-group-item {
+  .accounts-group .list-group-item {
     border: 0px !important;
   }
-  .wallets-group .list-group-item:hover {
+  .accounts-group .list-group-item:hover {
     background-color:transparent !important;
   }
-  .wallets-group .vgt-global-search {
+  .accounts-group .vgt-global-search {
     border: 0px !important;
   }
   .select-column-section {
